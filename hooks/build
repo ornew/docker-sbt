@@ -2,5 +2,5 @@
 set -eu
 
 docker build -t $IMAGE_NAME \
-  --build-arg BASE_IMAGE=ornew/sbt:1.2.6-base \
+  --build-arg BASE_IMAGE=ornew/sbt:base \
   .
