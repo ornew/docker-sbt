@@ -1,0 +1,6 @@
+#!/bin/bash
+set -eu
+
+docker build -t $IMAGE_NAME \
+  --build-arg BASE_IMAGE=ornew/sbt:base \
+  .
