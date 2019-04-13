@@ -1,12 +1,5 @@
-FROM alpine AS installer
-
-ARG SBT_VERSION=1.2.6
-ARG SBT_ARCHIVE_NAME=sbt-${SBT_VERSION}
-ARG SBT_DOWNLOAD_URL=https://github.com/sbt/sbt/releases/download/v${SBT_VERSION}/${SBT_ARCHIVE_NAME}.tgz
-
-RUN apk add --no-cache wget ca-certificates \
- && mkdir -p /tmp \
- && wget -qO - ${SBT_DOWNLOAD_URL} | tar -xz -C /tmp
+ARG BASE_IMAGE
+FROM $BASE_IMAGE AS installer
 
 FROM openjdk:jre-alpine
 
@@ -14,7 +7,7 @@ ENV SBT_HOME /opt/sbt
 ENV PATH $SBT_HOME/bin:$PATH
 
 COPY --from=installer /tmp/sbt $SBT_HOME
-RUN apk add --no-cache bash
+RUN apk add --no-cache bash libc6-compat
 
 WORKDIR /app
 ENTRYPOINT [ \
@@ -24,3 +17,4 @@ ENTRYPOINT [ \
   "-Dsbt.ivy.home=/app/.ivy2", \
   "-Dsbt.repository.config=/app/.sbt/repositories" \
 ]
+
